@@ -1,12 +1,12 @@
 package com.br.rasplus.service;
 
+import com.br.rasplus.dto.SubscriptionTypeDTO;
 import com.br.rasplus.model.SubscriptionType;
 import com.br.rasplus.repository.SubscriptionTypeRepository;
 import com.br.rasplus.service.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
@@ -16,6 +16,7 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
     SubscriptionTypeServiceImpl(SubscriptionTypeRepository subscriptionTypeRepository) {
         this.subscriptionTypeRepository = subscriptionTypeRepository;
     }
+
     @Override
     public List<SubscriptionType> findAll() {
         return subscriptionTypeRepository.findAll();
@@ -23,7 +24,7 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
 
     @Override
     public SubscriptionType findById(Long id) {
-        return  subscriptionTypeRepository.findById(id).orElseThrow(() -> new NotFoundException("SubscriptionType não encontrado"));
+        return subscriptionTypeRepository.findById(id).orElseThrow(() -> new NotFoundException("SubscriptionType não encontrado"));
     }
 
     @Override
@@ -37,7 +38,12 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
     }
 
     @Override
-    public SubscriptionType create(SubscriptionType subscriptionType) {
-        return null;
+    public SubscriptionType create(SubscriptionTypeDTO dto) {
+        return subscriptionTypeRepository.save(SubscriptionType.builder()
+                        .name(dto.getName())
+                        .accessMonths(dto.getAccessMonths())
+                        .price(dto.getPrice())
+                        .productKey(dto.getProductKey())
+                .build());
     }
 }

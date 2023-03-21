@@ -1,5 +1,6 @@
 package com.br.rasplus.service;
 
+import com.br.rasplus.dto.SubscriptionTypeDTO;
 import com.br.rasplus.model.SubscriptionType;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface SubscriptionTypeService {
 
     SubscriptionType delete(final Long id);
 
-    SubscriptionType create(SubscriptionType subscriptionType);
+    SubscriptionType create(SubscriptionTypeDTO subscriptionTypeDTO);
 }
