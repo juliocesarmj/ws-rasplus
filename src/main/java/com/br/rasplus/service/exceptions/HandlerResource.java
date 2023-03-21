@@ -12,4 +12,9 @@ public class HandlerResource {
     public ResponseEntity<String> notFoundHandler(NotFoundException n) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(n.getMessage());
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> badRequestHandler(BadRequestException n) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(n.getMessage());
+    }
 }
