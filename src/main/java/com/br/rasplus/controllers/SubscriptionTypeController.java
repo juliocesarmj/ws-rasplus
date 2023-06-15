@@ -4,10 +4,12 @@ import com.br.rasplus.dto.SubscriptionTypeDTO;
 import com.br.rasplus.model.SubscriptionType;
 import com.br.rasplus.service.SubscriptionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,7 +17,8 @@ import java.util.List;
 public class SubscriptionTypeController {
 
     @Autowired
-    SubscriptionTypeService subscriptionTypeService;
+    @Lazy
+    private SubscriptionTypeService subscriptionTypeService;
 
     @GetMapping
     public ResponseEntity<List<SubscriptionType>> findAll() {
@@ -28,7 +31,18 @@ public class SubscriptionTypeController {
     }
 
     @PostMapping(path = "/new-subscription-type")
-    public ResponseEntity<SubscriptionType> create(@RequestBody SubscriptionTypeDTO dto) {
+    public ResponseEntity<SubscriptionType> create(@Valid @RequestBody SubscriptionTypeDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeService.create(dto));
+    }
+    
+    @PutMapping(path = "/update-subscription-type")
+    public ResponseEntity<SubscriptionType> update(@RequestBody SubscriptionTypeDTO dto) {
+        return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeService.update(dto));
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<SubscriptionType> deleteById(@PathVariable Long id) {
+        subscriptionTypeService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

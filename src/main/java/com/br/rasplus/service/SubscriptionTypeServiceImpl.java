@@ -1,11 +1,15 @@
 package com.br.rasplus.service;
 
 import com.br.rasplus.dto.SubscriptionTypeDTO;
+import com.br.rasplus.mapper.SubscriptionTypeMapper;
 import com.br.rasplus.model.SubscriptionType;
 import com.br.rasplus.repository.SubscriptionTypeRepository;
 import com.br.rasplus.service.exceptions.BadRequestException;
 import com.br.rasplus.service.exceptions.NotFoundException;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +20,7 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
 
     private final SubscriptionTypeRepository subscriptionTypeRepository;
 
-    SubscriptionTypeServiceImpl(SubscriptionTypeRepository subscriptionTypeRepository) {
+    public SubscriptionTypeServiceImpl(SubscriptionTypeRepository subscriptionTypeRepository) {
         this.subscriptionTypeRepository = subscriptionTypeRepository;
     }
 
@@ -29,27 +33,27 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
     public SubscriptionType findById(Long id) {
         return subscriptionTypeRepository.findById(id).orElseThrow(() -> new NotFoundException("SubscriptionType não encontrado"));
     }
-
+    
     @Override
-    public SubscriptionType update(SubscriptionType subscriptionType) {
-        return null;
+    public SubscriptionType update(SubscriptionTypeDTO dto) {
+    	SubscriptionType subscriptionType = findById(dto.getId());
+    	
+    	if(!subscriptionType.getProductKey().equals(dto.getProductKey())) {
+    		throw new BadRequestException("Field not allowed for updating: productKey");
+    	}
+        return subscriptionTypeRepository.save(SubscriptionTypeMapper.fromDtoToEntity(dto));
     }
 
     @Override
     public void delete(Long id) {
-//        subscriptionTypeRepository.delete(findById(id));
+       subscriptionTypeRepository.delete(findById(id));
     }
 
     @Override
     public SubscriptionType create(SubscriptionTypeDTO dto) {
         validId(dto.getId());
         validProductKey(dto.getProductKey());
-        return subscriptionTypeRepository.save(SubscriptionType.builder()
-                        .name(dto.getName())
-                        .accessMonths(dto.getAccessMonths())
-                        .price(dto.getPrice())
-                        .productKey(dto.getProductKey())
-                .build());
+        return subscriptionTypeRepository.save(SubscriptionTypeMapper.fromDtoToEntity(dto));
     }
 
     private void validProductKey(String productKey) {
