@@ -25,22 +25,22 @@ public class SubscriptionTypeController {
         return ResponseEntity.ok(subscriptionTypeService.findAll());
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SubscriptionType> findById(@PathVariable Long id) {
         return ResponseEntity.ok(subscriptionTypeService.findById(id));
     }
 
-    @PostMapping(path = "/new-subscription-type")
+    @PostMapping("/new-subscription-type")
     public ResponseEntity<SubscriptionType> create(@Valid @RequestBody SubscriptionTypeDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeService.create(dto));
     }
     
-    @PutMapping(path = "/update-subscription-type")
+    @PutMapping("/update-subscription-type")
     public ResponseEntity<SubscriptionType> update(@RequestBody SubscriptionTypeDTO dto) {
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeService.update(dto));
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<SubscriptionType> deleteById(@PathVariable Long id) {
         subscriptionTypeService.delete(id);
         return ResponseEntity.noContent().build();

@@ -29,7 +29,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "users_id")
     private Long id;
 	
@@ -61,6 +61,7 @@ public class User implements Serializable {
     
     @PrePersist
     public void doPersist() {
+        this.dtExpiration = LocalDate.now();
         this.dtSubscription = LocalDate.now();
     }
 
