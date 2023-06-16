@@ -4,6 +4,7 @@ import com.br.rasplus.dto.error.ErrorMapResponseDTO;
 import com.br.rasplus.dto.error.ErrorResponseDTO;
 import com.br.rasplus.service.exceptions.BadRequestException;
 import com.br.rasplus.service.exceptions.NotFoundException;
+import com.br.rasplus.service.exceptions.RestClientException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -58,6 +59,16 @@ public class HandlerResource {
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<ErrorResponseDTO> handlerSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDTO.builder()
+                .message(e.getMessage())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .path(req.getRequestURI())
+                .build());
+    }
+
+    @ExceptionHandler(RestClientException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerRestClientException(RestClientException e, HttpServletRequest req) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDTO.builder()
                 .message(e.getMessage())
                 .httpStatus(HttpStatus.BAD_REQUEST)
