@@ -10,5 +10,5 @@ public interface WsRaspayIntegration {
 
     OrderDto createOrder(OrderDto dto);
 
-    boolean isProcessPaymeny(Payment payment);
+    Boolean isProcessPayment(Payment payment);
 }
